@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="472.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cwdemo.controller.TaxCalculateController">
+   <children>
+      <Label layoutX="240.0" layoutY="54.0" text="Tax Rate ">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Line endX="100.0" layoutX="300.0" layoutY="109.0" startX="-100.0" />
+      <Label layoutX="27.0" layoutY="148.0" text="Enter the Tax Rate : " />
+      <TextField fx:id="enterTaxArea" layoutX="149.0" layoutY="143.0" prefHeight="26.0" prefWidth="274.0" />
+      <Button layoutX="476.0" layoutY="140.0" mnemonicParsing="false" onAction="#onCalculateButton" style="-fx-background-color: BDDDE4;" text="Calculate">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Label layoutX="93.0" layoutY="219.0" prefHeight="26.0" prefWidth="133.0" text="Total Profit : ">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="93.0" layoutY="272.0" prefHeight="26.0" prefWidth="94.0" text="Total Loss : ">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="93.0" layoutY="317.0" text="Final Tax : ">
+         <font>
+            <Font size="33.0" />
+         </font>
+      </Label>
+      <Label fx:id="totalProfitLabel" layoutX="290.0" layoutY="219.0" prefHeight="31.0" prefWidth="266.0" style="-fx-background-color: lightGray; -fx-font-size: 24; -fx-alignment: CENTER;" />
+      <Label fx:id="totalLossLabel" layoutX="290.0" layoutY="269.0" prefHeight="31.0" prefWidth="266.0" style="-fx-background-color: lightGray; -fx-font-size: 24; -fx-alignment: CENTER;" />
+      <Label fx:id="finalTaxLabel" layoutX="246.0" layoutY="326.0" prefHeight="31.0" prefWidth="309.0" style="-fx-background-color: lightGray; -fx-font-size: 24; -fx-alignment: CENTER;" />
+      <Button layoutX="181.0" layoutY="418.0" mnemonicParsing="false" onAction="#ExitCodeButton" prefHeight="31.0" prefWidth="210.0" style="-fx-background-color: BDDDE4;" text="Done ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

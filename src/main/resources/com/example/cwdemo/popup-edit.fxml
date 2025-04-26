@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="538.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cwdemo.controller.PopupEditController">
+   <children>
+      <Label layoutX="111.0" layoutY="46.0" prefHeight="47.0" prefWidth="207.0" text="Edit Invalid  Records" textAlignment="CENTER">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <Line endX="174.79998779296875" layoutX="166.0" layoutY="109.0" startX="-100.0" />
+      <Label layoutX="23.0" layoutY="163.0" prefHeight="22.0" prefWidth="85.0" text="Item Code : ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <TextField fx:id="itemCodeField" layoutX="137.0" layoutY="161.0" prefHeight="26.0" prefWidth="254.0" />
+      <Label layoutX="24.0" layoutY="215.0" text="Internal Price :  ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <TextField fx:id="internalPriceField" layoutX="137.0" layoutY="213.0" prefHeight="26.0" prefWidth="254.0" />
+      <Label layoutX="22.0" layoutY="272.0" text="Discount : ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <TextField fx:id="discountField" layoutX="137.0" layoutY="269.0" prefHeight="26.0" prefWidth="254.0" />
+      <Label layoutX="25.0" layoutY="337.0" text="Sales Price : ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <TextField fx:id="salesPriceField" layoutX="137.0" layoutY="334.0" prefHeight="26.0" prefWidth="254.0" />
+      <Label layoutX="23.0" layoutY="403.0" text="Qunatity : ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <TextField fx:id="quantityField" layoutX="137.0" layoutY="400.0" prefHeight="26.0" prefWidth="254.0" />
+      <Button fx:id="cancelButton" layoutX="55.0" layoutY="479.0" mnemonicParsing="false" onAction="#cancelButtonClick" prefHeight="26.0" prefWidth="102.0" style="-fx-background-color: BDDDE4;" text="Cancel " />
+      <Button layoutX="236.0" layoutY="479.0" mnemonicParsing="false" onAction="#updateRecords" prefHeight="26.0" prefWidth="129.0" style="-fx-background-color: BDDDE4;" text="Update Records " />
+   </children>
+</AnchorPane>
