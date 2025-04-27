@@ -68,6 +68,24 @@ public class PopupEditController {
             discount = Double.parseDouble(discountField.getText());
             salesPrice = Double.parseDouble(salesPriceField.getText());
             quantity = Integer.parseInt(quantityField.getText());
+
+            if(internalPrice <0.0 || discount <0.0 || salesPrice <0.0 ||quantity < 0){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please enter valid values");
+                alert.showAndWait();
+                return;
+            }
+
+            if(itemCode.isEmpty() || itemCode.matches("^[a-zA-Z0-9_]*$")){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please enter valid item code only using underscore");
+                alert.showAndWait();
+                return;
+            }
         }catch (NumberFormatException e){
             // show an error alert if numeric input is invalid
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -95,8 +113,9 @@ public class PopupEditController {
 
         int calculateChecksum = checksum.calculateChecksum(combine);
         transaction.setCheckSum(calculateChecksum);
+        itemCode = itemCodeField.getText().trim();
         // validation checker
-        boolean hasSpecialChar = !transaction.getItemCode().matches("^[a-zA-Z0-9]*$");
+        boolean hasSpecialChar = !itemCode.matches("^[a-zA-Z0-9_]*$");
         boolean checksumMissMatch = calculateChecksum != transaction.getCheckSum();
         boolean negativeCheck = transaction.getInternalPrice() < 0;
 

@@ -119,7 +119,7 @@ public class TransactionTableController {
             // get checksum for each row
             int calculateChecksum = checksum.calculateChecksum(combine);
             // special character
-            boolean hasSpecialChar = !transaction.getItemCode().matches("^[a-zA-Z0-9]*$");
+            boolean hasSpecialChar = !transaction.getItemCode().matches("^[a-zA-Z0-9_]*$");
             boolean checksumMissMatch = calculateChecksum != transaction.getCheckSum();
             // negative prices for internal price
             boolean negativeCheck = transaction.getInternalPrice() < 0;
