@@ -101,10 +101,6 @@ public class TransactionTableController {
         }
     }
 
-    // clean all transaction from the table
-    public void clearTable(){
-        transactionTable.getItems().clear();
-    }
 
     // validate transaction and show validation summary
     public void validateTransaction(ActionEvent event) {

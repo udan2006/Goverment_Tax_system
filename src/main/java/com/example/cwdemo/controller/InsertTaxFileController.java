@@ -48,7 +48,14 @@ public class InsertTaxFileController {
             alert.setContentText("Please select a file");
             alert.showAndWait();
             return;
-
+        }
+        if (!filePath.getText().endsWith(".csv")) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid file");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a valid csv file");
+            alert.showAndWait();
+            return;
         }
         try {
             // Load the transaction table FXML file
@@ -57,8 +64,7 @@ public class InsertTaxFileController {
 
             // get the TransactionTableController instance
             TransactionTableController controller = loader.getController();
-            controller.clearTable();
-            controller.setTransactions(selectedFile);
+            controller.setTransactions(new File(filePath.getText()));
 
             // open a new stage with the transaction table scene
             Stage stage = new Stage();
@@ -71,7 +77,11 @@ public class InsertTaxFileController {
             currentStage.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No file Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a file");
+            alert.showAndWait();
         }
     }
 }
