@@ -24,14 +24,17 @@ public class PopupEditController {
     public Button cancelButton;
 
 
+    // Reference to the TableView containing transaction records
     private TableView <Transaction> table;
 
+    // setter method to receive the table instance from the parent controller
     public void setTable(TableView <Transaction> table) {
         this.table = table;
     }
 
 
     private TransactionTableController TransactionController;
+    // setter methods to receive the TransactionTableController instance
     public void setTransactionController(TransactionTableController TransactionController) {
         this.TransactionController = TransactionController;
     }
@@ -40,6 +43,7 @@ public class PopupEditController {
     private Checksum checksum = new Checksum();
 
 
+    // when I click edit button it open with the these set values of the row
     public void setRecord(Transaction transaction) {
         this.transaction = transaction;
         itemCodeField.setText(transaction.getItemCode());
@@ -57,6 +61,7 @@ public class PopupEditController {
         Double salesPrice;
         Integer quantity;
 
+        // input validation: ensure all numeric fields contain valid number
         try{
             itemCode = itemCodeField.getText();
             internalPrice = Double.parseDouble(internalPriceField.getText());
@@ -64,6 +69,7 @@ public class PopupEditController {
             salesPrice = Double.parseDouble(salesPriceField.getText());
             quantity = Integer.parseInt(quantityField.getText());
         }catch (NumberFormatException e){
+            // show an error alert if numeric input is invalid
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -72,12 +78,14 @@ public class PopupEditController {
             return;
         }
 
+        //Update the transaction object with new values
         transaction.setItemCode(itemCode);
         transaction.setInternalPrice(internalPrice);
         transaction.setDiscount(discount);
         transaction.setSalesPrice(salesPrice);
         transaction.setQuantity(quantity);
 
+        // Recalculate checksum
         String combine = transaction.getBillNumber() +
                 transaction.getItemCode() +
                 transaction.getInternalPrice() +
@@ -87,23 +95,29 @@ public class PopupEditController {
 
         int calculateChecksum = checksum.calculateChecksum(combine);
         transaction.setCheckSum(calculateChecksum);
+        // validation checker
         boolean hasSpecialChar = !transaction.getItemCode().matches("^[a-zA-Z0-9]*$");
         boolean checksumMissMatch = calculateChecksum != transaction.getCheckSum();
         boolean negativeCheck = transaction.getInternalPrice() < 0;
 
+        // set validation status based on checks
         if(hasSpecialChar || checksumMissMatch || negativeCheck){
             transaction.setValidationStatus("Invalid");
         }else {
             transaction.setValidationStatus("Valid");
         }
 
+        // refresh the TableView
         table.refresh();
+        // save changes to the csv file
         TransactionController.saveUpdatesToCsv();
 
+        // close the popup window
         Stage stage = (Stage) itemCodeField.getScene().getWindow();
         stage.close();
     }
 
+    // close the popup window without saving changes
     public void cancelButtonClick(ActionEvent event) {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();

@@ -50,13 +50,15 @@ public class TransactionTableController {
     @FXML
     public TableColumn <Transaction,Double> profitCol;
 
+    // observable list for transaction
     private ObservableList<Transaction> transactions = FXCollections.observableArrayList();
-    private Checksum checksum = new Checksum();
+    private Checksum checksum = new Checksum(); // checksum calculation
     private File currentFile;
     private CalculateProfit profitCalculator = new CalculateProfit();
 
 
     @FXML
+    // Initialize the TableView columns
     public void initialize() {
        billNoCol.setCellValueFactory(new PropertyValueFactory<>("billNumber"));
        itemCodeCol.setCellValueFactory(new PropertyValueFactory<>("itemCode"));
@@ -68,16 +70,17 @@ public class TransactionTableController {
        validationCol.setCellValueFactory(new PropertyValueFactory<>("ValidationStatus"));
        profitCol.setCellValueFactory(new PropertyValueFactory<>("profit"));
 
-        transactionTable.setItems(transactions);
+        transactionTable.setItems(transactions); // set the table's items to the transaction list
     }
 
+    // method to load transaction from a file into the table
     public void setTransactions(File file ) {
         transactionTable.getItems().clear();
         this.currentFile = file;
         try{
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
-            reader.readLine();
+            reader.readLine();// Skip the header
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
                 if(data.length == 7){
@@ -89,6 +92,7 @@ public class TransactionTableController {
                             Integer.parseInt(data[5]),
                             Integer.parseInt(data[6])
                     );
+                    // add each transaction to the list
                     transactions.add(transaction);
                 }
             }
@@ -97,10 +101,12 @@ public class TransactionTableController {
         }
     }
 
+    // clean all transaction from the table
     public void clearTable(){
         transactionTable.getItems().clear();
     }
 
+    // validate transaction and show validation summary
     public void validateTransaction(ActionEvent event) {
         int total = transactionTable.getItems().size();
         int validateCount = 0;
@@ -114,9 +120,12 @@ public class TransactionTableController {
                             String.valueOf(transaction.getSalesPrice()) +
                             String.valueOf(transaction.getQuantity());
 
+            // get checksum for each row
             int calculateChecksum = checksum.calculateChecksum(combine);
+            // special character
             boolean hasSpecialChar = !transaction.getItemCode().matches("^[a-zA-Z0-9]*$");
             boolean checksumMissMatch = calculateChecksum != transaction.getCheckSum();
+            // negative prices for internal price
             boolean negativeCheck = transaction.getInternalPrice() < 0;
 
             if(hasSpecialChar || checksumMissMatch || negativeCheck){
@@ -127,8 +136,10 @@ public class TransactionTableController {
                 validateCount++;
             }
         }
+        // refresh the table after validation
         transactionTable.refresh();
 
+        // alert with validation summary
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Validation Summary");
         alert.setHeaderText("Validation Successful");
@@ -138,6 +149,7 @@ public class TransactionTableController {
         alert.showAndWait();
     }
 
+    // Edit selected transaction
     public void editTransaction(ActionEvent event) {
         Transaction selectedItem = (Transaction) transactionTable.getSelectionModel().getSelectedItem();
 
@@ -157,6 +169,7 @@ public class TransactionTableController {
         }
         else {
             try {
+                // load the popup editor to edit the selection transaction
                 FXMLLoader loader = new FXMLLoader(MainMenu.class.getResource("popup-edit.fxml"));
                 Parent root = loader.load();
 
@@ -175,15 +188,17 @@ public class TransactionTableController {
         }
     }
 
+    // delete invalid records from the table
     public void deleteInvalidRecordsButton(ActionEvent event) {
         Transaction selectedItem = (Transaction) transactionTable.getSelectionModel().getSelectedItem();
 
         if(selectedItem != null){
             if(selectedItem.getValidationStatus().equals("Invalid")){
-                transactions.remove(selectedItem);
+                transactions.remove(selectedItem);  // remove invalid transaction
                 transactionTable.refresh();
-                saveUpdatesToCsv();
+                saveUpdatesToCsv();  // save changes to the file
 
+                // show success alert
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Invalid Record detected");
                 alert.setHeaderText(null);
@@ -205,12 +220,13 @@ public class TransactionTableController {
         }
     }
 
+    // save updated transactions back to the csv file
     public void saveUpdatesToCsv(){
         if(currentFile == null){
             return;
         }
         try (PrintWriter writer = new PrintWriter(currentFile)){
-
+            // write the header and transaction data in to the csv file
             writer.println("BillNumber, ItemCode, InternalPrice, Discount, SalesPrice, Quantity, Checksum");
 
             for(Transaction transaction : transactions){
@@ -227,13 +243,16 @@ public class TransactionTableController {
         }
     }
 
+    // calculate profit of all transaction
     public void profitCalculationButton(ActionEvent event) {
         for(Transaction transaction : transactions){
-            double profit = profitCalculator.calculate(transaction);
+            double profit = profitCalculator.calculate(transaction); // set the calculated profit for each transaction
             transaction.setProfit(profit);
         }
+        // refresh the table to display updated profits
         transactionTable.refresh();
 
+        // show success alert
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Profit Calculation");
         alert.setHeaderText(null);
@@ -241,6 +260,7 @@ public class TransactionTableController {
         alert.showAndWait();
     }
 
+    // delete transaction with zero profit
     public void deleteZeroProfit(ActionEvent event) {
         int zeroProfit = 0;
 
@@ -248,12 +268,12 @@ public class TransactionTableController {
         while(iterator.hasNext()){
             Transaction transaction = iterator.next();
             if(transaction.getProfit() == 0.0){
-                iterator.remove();
+                iterator.remove(); // remove zero profit transaction
                 zeroProfit++;
             }
         }
-        saveUpdatesToCsv();
-        transactionTable.refresh();
+        saveUpdatesToCsv();  // save changes to the file
+        transactionTable.refresh(); // refresh page
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Zero Profit Calculation");
@@ -261,6 +281,7 @@ public class TransactionTableController {
         alert.setContentText(zeroProfit + "Zero profit records deleted successfully");
     }
 
+    // open tax rate dialog and calculate tax
     public void calculateTax(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(MainMenu.class.getResource("tax-rate.fxml"));
@@ -269,11 +290,15 @@ public class TransactionTableController {
             TaxCalculateController controller = loader.getController();
             CalculateTax calculateTax = new CalculateTax();
 
+            // calculate total profit and loss
             double totalProfit = calculateTax.calculateTotalProfit(transactions);
             double totalLoss = calculateTax.calculateTotalLoss(transactions);
+            controller.setTransactions(transactionTable.getItems());
 
+            // set the calculated tax value in the controller
             controller.setText(totalProfit, totalLoss);
 
+            // show the tax calculation dialog
             Stage stage = new Stage();
             stage.setTitle("Tax Rate");
             stage.setScene(new Scene(root));

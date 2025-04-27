@@ -3,6 +3,7 @@ package com.example.cwdemo.model;
 import javafx.beans.property.*;
 
 public class Transaction {
+    // javaFx properties
     private final SimpleStringProperty billNumber;
     private final SimpleStringProperty itemCode;
     private final SimpleDoubleProperty internalPrice;
@@ -13,6 +14,7 @@ public class Transaction {
     private SimpleStringProperty ValidationStatus;
     private SimpleDoubleProperty profit;
 
+    // constructor for creating a transaction object with all properties initialized
     public Transaction (String billNumber, String itemCode,Double internalPrice, Double discount, Double salesPrice, int quantity, int checkSum) {
         this.billNumber = new SimpleStringProperty(billNumber);
         this.itemCode = new SimpleStringProperty(itemCode);
@@ -24,6 +26,8 @@ public class Transaction {
         this.ValidationStatus = new SimpleStringProperty("Not Validated");
         this.profit = new SimpleDoubleProperty(0.0);
     }
+
+    // getters and setters methods for each property
 
     public String getBillNumber() {
         return billNumber.get();
