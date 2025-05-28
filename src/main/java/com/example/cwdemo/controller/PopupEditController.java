@@ -78,7 +78,7 @@ public class PopupEditController {
                 return;
             }
 
-            if(itemCode.isEmpty() || itemCode.matches("^[a-zA-Z0-9_]*$")){
+            if(itemCode.isEmpty() || !itemCode.matches("^[a-zA-Z0-9_]*$")){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
